@@ -8,7 +8,7 @@ import logging
 import json
 import csv
 
-def lieferando_scraper():
+def restaurant_names():
     result = []
     
     postal_codes = []
@@ -29,8 +29,9 @@ def lieferando_scraper():
                 name = j.text.strip()
                 location_list.append(name)
             
-            print(location_list)
             
+        
         except Exception as e:
             print('Error: ',e)
-            
+
+    return location_list
