@@ -7,15 +7,33 @@ import locale
 import logging
 import json
 import csv
+## def products_instance():
+    
 
-def get_locations(location_name):
+def get_locations(location_name, option, session):
+    
+    restaurant_links = []
     location_list = []
+    
     for idx, j in enumerate(location_name):
         name = j.text.strip()
         location_list.append(name)
-    return location_list
 
-def lieferando_crawler(a):
+        restaurant_links.append([j['href'],name])
+        try:
+            location_string = str(restaurant_links[idx][0])
+            products_request = session.get('https://www.lieferando.de'+location_string)
+                   
+        except Exception as e:
+            print('Error at restaurant: ', location_string, ' as ', e)
+        
+    if option == 'names':
+        return location_list    
+    else:
+        print('Test')
+    
+
+def lieferando_crawler(option):
     
     ## Dummy postal code 
     ## User can give Postal Codes as input for the function e.g.
@@ -33,14 +51,11 @@ def lieferando_crawler(a):
             location_name = location_parse.find_all("a", class_="restaurantname")
               
             ## User selection of which data is wanted
-            if a == 'locations':
-                restaurant_list = get_locations(location_name)
-                return restaurant_list
-            elif a == 'products':
-                print('None')
-            else:
-                print('None')
+            
+            result = get_locations(location_name, option, session)
+            
             
         
         except Exception as e:
             print('Error: ',e)
+    return result
